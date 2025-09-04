@@ -133,11 +133,3 @@ The second version addresses NaN issues through **two simple but effective chang
 
 These minimal changes maintain the core Mamba-in-Mamba architecture while ensuring stable training on datasets like CIFAR-10.
 
-## Note on Residual Connections
-
-Neither version implements residual connections. While not necessary for the basic stability fixes, residual connections could provide additional benefits:
-- Enhanced gradient flow  
-- Better training stability  
-- Faster convergence  
-
-However, the clamping and initialization improvements alone are sufficient to resolve the NaN issues encountered during training.
