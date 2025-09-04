@@ -50,3 +50,14 @@ wandb/         # Weights & Biases
 # Tests cache
 .pytest_cache/
 .mypy_cache/
+data/
+*.tar.gz
+checkpoints/
+checkpoints_*/
+*.pt
+*.pth
+*.ckpt
+runs/
+wandb/
+outputs/
+results/
