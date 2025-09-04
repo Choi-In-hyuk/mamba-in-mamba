@@ -34,3 +34,24 @@
   <img src="https://github.com/user-attachments/assets/50a73a54-a2ff-4f5b-9108-38c7ecb5c98c" width="250" />
   <img src="https://github.com/user-attachments/assets/446eb396-eaf7-44dc-81b2-d149337c426a" width="250" />
 </p>
+
+
+# Repository Structure (modified)
+
+## Root: `~/mamba`
+- **train_mnist.py**  
+  Mamba-in-Mamba 모델을 사용한 MNIST 학습 코드  
+- **train_mamba_mnist.py**  
+  기존 Mamba 모델을 사용한 MNIST 학습 코드  
+
+- **train_cifar10_gray_mamba_in_mamba.py**  
+  Mamba-in-Mamba 모델을 사용한 CIFAR-10 학습 코드 (Grayscale)  
+- **train_cifar10_gray_mamba.py**  
+  기존 Mamba 모델을 사용한 CIFAR-10 학습 코드 (Grayscale)  
+
+
+## Modules: `~/mamba/mamba_ssm/modules`
+- **mamba_in_mamba.py**  
+  MNIST 실험에서 사용한 Mamba-in-Mamba 모델 정의  
+- **mamba_in_mamba_residual.py**  
+  CIFAR-10 실험에서 사용한 Residual 구조 기반 Mamba-in-Mamba 모델 정의  
