@@ -1,6 +1,52 @@
-*__pycache__/
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Build artifacts
 *.egg-info/
 build/
-**.so
+dist/
+*.so
 *.hip
 *_hip.*
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Checkpoints & model weights
+checkpoints/
+checkpoints_*/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Data & large files
+data/
+datasets/
+*.tar.gz
+
+# Experiment outputs
+outputs/
+results/
+runs/          # TensorBoard logs
+wandb/         # Weights & Biases
+
+# Tests cache
+.pytest_cache/
+.mypy_cache/
