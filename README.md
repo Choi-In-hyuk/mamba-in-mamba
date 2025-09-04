@@ -28,7 +28,7 @@
   <img src="https://github.com/user-attachments/assets/c4de8bb7-857b-412a-8565-5018377a33c9" width="250" />
 </p>
 
-## Mamba-in-mamba (ours)  
+## Mamba-in-mamba (ours) : Best test accuracy: maybe 53?
 <p float="left">
   <img src="https://github.com/user-attachments/assets/6dcc0044-d5dd-4475-9482-512526d0540c" width="250" />
   <img src="https://github.com/user-attachments/assets/50a73a54-a2ff-4f5b-9108-38c7ecb5c98c" width="250" />
