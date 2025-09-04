@@ -37,7 +37,7 @@
 
 # Repository Structure (modified)
 
-## Root: `~/mamba`
+## Train: `~/mamba`
 - **train_mnist.py**  
   Training script for MNIST using the **Mamba-in-Mamba** model  
 - **train_mamba_mnist.py**  
