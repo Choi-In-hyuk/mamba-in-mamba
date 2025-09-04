@@ -12,7 +12,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 from mamba_ssm.modules.mamba_simple import Mamba
-from mamba_ssm.modules.mamba_in_mamba_residual import MambaInMamba
+from mamba_ssm.modules.mamba_in_mamba_stable import MambaInMamba
 
 
 def trunc_normal_(w, std=0.02):
