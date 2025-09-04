@@ -55,3 +55,89 @@
 - **mamba_in_mamba_residual.py**  
   Residual-based Mamba-in-Mamba model implementation for CIFAR-10 experiments  
 
+# Mamba-in-Mamba: Stability Improvements
+
+## Overview
+This document compares two versions of the Mamba-in-Mamba implementation, where the second version addresses NaN issues encountered during CIFAR-10 training.
+
+## Key Changes Made
+
+### 1. Weight Initialization Improvements
+
+**Before (First Version):**
+```python
+# Used default PyTorch initialization
+self.in_proj = nn.Linear(self.d_model, self.d_inner * 2, bias=bias, **factory_kwargs)
+self.out_proj = nn.Linear(self.d_inner, self.d_model, bias=bias, **factory_kwargs)
+```
+
+**After (Second Version):**
+```python
+def trunc_normal_(w, std=0.02):
+    nn.init.trunc_normal_(w, std=std)
+
+# Small standard deviation initialization for all linear layers
+self.in_proj = nn.Linear(self.d_model, self.d_inner * 2, bias=bias, **factory_kwargs)
+trunc_normal_(self.in_proj.weight, std=init_std)  # init_std=0.02
+if self.in_proj.bias is not None:
+    nn.init.zeros_(self.in_proj.bias)
+
+# Initialize dt_out_proj weights to zero (bias-only start for stable dt)
+nn.init.zeros_(self.dt_out_proj.weight)
+```
+
+### 2. Delta Value Clamping
+
+**Before:**
+```python
+# No constraints on delta values
+delta = self.dt_out_proj(dt_mamba_out)
+delta = rearrange(delta, "(b l) d -> b d l", b=batch, l=seqlen)
+```
+
+**After:**
+```python
+# Clamp delta values to prevent extreme values
+delta = self.dt_out_proj(dt_mamba_out)
+delta = torch.clamp(delta, -self.clamp_delta, self.clamp_delta)  # clamp_delta=6.0
+delta = rearrange(delta, "(b l) d -> b d l", b=Bsz, l=L)
+```
+
+### 3. Additional Stability Parameters
+
+**New parameters added in the second version:**
+```python
+clamp_delta: float = 6.0,   # clamp pre-softplus delta to [-clamp_delta, clamp_delta]
+init_std: float = 0.02,     # small init for projections
+```
+
+## Root Causes of NaN Issues
+
+### 1. Initialization Problems
+- **Issue**: Large initial weights → large delta values → extremely large values after softplus  
+- **Solution**: Small standard deviation (0.02) initialization + zero initialization for dt_out_proj weights  
+
+### 2. Delta Value Explosion
+- **Issue**: Inner Mamba outputting extreme values → inf values after softplus  
+- **Solution**: Apply `torch.clamp(-6.0, 6.0)` before softplus  
+
+### 3. Gradient Instability
+- **Issue**: Large delta values causing cascading gradient explosions  
+- **Solution**: Conservative initialization + value constraints  
+
+## Summary
+
+The second version addresses NaN issues through **two simple but effective changes**:
+1. **Better initialization**: Smaller initial weights and zero-initialized dt projection  
+2. **Value clamping**: Preventing extreme delta values before softplus activation  
+
+These minimal changes maintain the core Mamba-in-Mamba architecture while ensuring stable training on datasets like CIFAR-10.
+
+## Note on Residual Connections
+
+Neither version implements residual connections. While not necessary for the basic stability fixes, residual connections could provide additional benefits:
+- Enhanced gradient flow  
+- Better training stability  
+- Faster convergence  
+
+However, the clamping and initialization improvements alone are sufficient to resolve the NaN issues encountered during training.
